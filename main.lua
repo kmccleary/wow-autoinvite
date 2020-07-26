@@ -19,11 +19,12 @@ function isInvitationRequest(msg, event)
         end
     end
     -- Decide if it is an invitation request based on the context and keywords.
-    return org or uc -- or tb
+    return org or uc or tb
 end
 
-SLASH_AUTOINVITER1 = "/sellportals"
-function SlashCmdList.AUTOINVITER(msg, editbox)
+SLASH_AUTOINVITE1 = "/autoinvite"
+SLASH_AUTOINVITE2 = "/ai"
+function SlashCmdList.AUTOINVITE(msg, editbox)
     sellingIsEnabled = not sellingIsEnabled
     if sellingIsEnabled then
         print("Selling portals is ENABLED.")
