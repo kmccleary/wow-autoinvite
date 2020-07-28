@@ -81,7 +81,7 @@ function SlashCmdList.AUTOINVITE(msg, editbox)
     local _, _, cmd, args = string.find(msg, "%s?(%w+)%s?(.*)")
     if cmd == "s" or cmd == "sell" then
         sellingIsEnabled = stateEnabler("Selling portals mode", sellingIsEnabled, args)
-    elseif cmd == "sg" or cmd == "summon" then
+    elseif cmd == "sg" or cmd == "sum" or cmd == "summon" then
         summoningIsEnabled = stateEnabler("Summoning group mode", summoningIsEnabled, args)
         if summoningIsEnabled then
             raidIsEnabled = false
