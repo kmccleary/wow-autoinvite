@@ -1,8 +1,13 @@
 sellingIsEnabled = false
 summoningIsEnabled = false
+raidIsEnabled = false
 
 -- Tests for selling portals requests.
 function isSellingRequest(msg, event)
+    -- Abort if mode is not enabled.
+    if not sellingIsEnabled then
+        return false
+    end
     -- Abort if not a desirable event type.
     if event == "CHAT_MSG_GUILD" then
         return false
@@ -23,20 +28,24 @@ function isSummoningRequest(msg, event)
     -- Scan for keywords.
     local hasInvite = false
     local hasSummon = false
+    local hasRaid = false
     for part in msg:gmatch("%S+") do
         part = part:lower()
-        if part == "inv" or part == "invite" then
+        if part == "i" or part == "inv" or part == "invite" then
             hasInvite = true
         end
-        if part == "sum" or part == "summon" then
+        if part == "sg" or part == "sum" or part == "summon" then
             hasSummon = true
+        end
+        if part == "rg" or part == "raid" then
+            hasRaid = true
         end
     end
     -- Make the decision based on event type.
     if event == "CHAT_MSG_WHISPER" then
-        return hasInvite
+        return hasInvite and (summoningIsEnabled or raidIsEnabled)
     elseif event == "CHAT_MSG_GUILD" then
-        return hasInvite and hasSummon
+        return hasInvite and ((summoningIsEnabled and hasSummon) or (raidIsEnabled and hasRaid))
     else
         return false
     end
@@ -72,16 +81,22 @@ function SlashCmdList.AUTOINVITE(msg, editbox)
     local _, _, cmd, args = string.find(msg, "%s?(%w+)%s?(.*)")
     if cmd == "s" or cmd == "sell" then
         sellingIsEnabled = stateEnabler("Selling portals mode", sellingIsEnabled, args)
-    elseif cmd == "sum" or cmd == "summon" then
-        summoningIsEnabled = stateEnabler("Summoning mode", summoningIsEnabled, args)
+    elseif cmd == "sg" or cmd == "summon" then
+        summoningIsEnabled = stateEnabler("Summoning group mode", summoningIsEnabled, args)
+        if summoningIsEnabled then
+            raidIsEnabled = false
+        end
+    elseif cmd == "rg" or cmd == "raid" then
+        raidIsEnabled = stateEnabler("Raid group mode", raidIsEnabled, args)
+        if raidIsEnabled then
+            summoningIsEnabled = false
+        end
     elseif cmd == "on" then
         sellingIsEnabled = stateSetter("Selling portals mode", true)
-        summoningIsEnabled = stateSetter("Summoning mode", true)
     elseif cmd == "off" then
         sellingIsEnabled = stateSetter("Selling portals mode", false)
-        summoningIsEnabled = stateSetter("Summoning mode", false)
     else
-        print("Syntax: /ai (sell|summon) [on|off]")
+        print("Syntax: /ai (sell|summon|raid) [on|off]")
     end
 end
 
@@ -97,9 +112,9 @@ frame:SetScript("OnEvent", function(self, event, ...)
     local senderName = select(2, ...)
     --local playerGuid = UnitGUID('player')
     -- Ignore if message isn't an invitation request.
-    if sellingIsEnabled and isSellingRequest(msg, event) then
+    if isSellingRequest(msg, event) then
         InviteUnit(senderName)
-    elseif summoningIsEnabled and isSummoningRequest(msg, event) then
+    elseif isSummoningRequest(msg, event) then
         InviteUnit(senderName)
     end
 end)
