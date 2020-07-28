@@ -43,15 +43,25 @@ function isSummoningRequest(msg, event)
 end
 
 -- Determines the desired state from arguments passed to slash commands.
-function stateEnabler(currentState, args)
+function stateEnabler(what, currentState, args)
     if args == "on" then
-        return true
+        return stateSetter(what, true)
     elseif args == "off" then
-        return false
+        return stateSetter(what, false)
     elseif args == "" or args == "toggle" then
-        return not currentState
+        return stateSetter(what, not currentState)
     else
-        return currentState
+        return stateSetter(what, currentState)
+    end
+end
+
+function stateSetter(what, desiredState)
+    if desiredState then
+        print(what .. " is ENABLED.")
+        return true
+    else
+        print(what .. " is DISABLED.")
+        return false
     end
 end
 
@@ -61,19 +71,15 @@ SLASH_AUTOINVITE2 = "/ai"
 function SlashCmdList.AUTOINVITE(msg, editbox)
     local _, _, cmd, args = string.find(msg, "%s?(%w+)%s?(.*)")
     if cmd == "s" or cmd == "sell" then
-        sellingIsEnabled = stateEnabler(sellingIsEnabled, args)
-        if sellingIsEnabled then
-            print("Selling portals is ENABLED.")
-        else
-            print("Selling portals is DISABLED.")
-        end
+        sellingIsEnabled = stateEnabler("Selling portals mode", sellingIsEnabled, args)
     elseif cmd == "sum" or cmd == "summon" then
-        summoningIsEnabled = stateEnabler(summoningIsEnabled, args)
-        if summoningIsEnabled then
-            print("Summoning is ENABLED.")
-        else
-            print("Summoning is DISABLED.")
-        end
+        summoningIsEnabled = stateEnabler("Summoning mode", summoningIsEnabled, args)
+    elseif cmd == "on" then
+        sellingIsEnabled = stateSetter("Selling portals mode", true)
+        summoningIsEnabled = stateSetter("Summoning mode", true)
+    elseif cmd == "off" then
+        sellingIsEnabled = stateSetter("Selling portals mode", false)
+        summoningIsEnabled = stateSetter("Summoning mode", false)
     else
         print("Syntax: /ai (sell|summon) [on|off]")
     end
