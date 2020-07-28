@@ -10,9 +10,9 @@ function isSellingRequest(msg, event)
     -- Scan for keywords and make the decision.
     for part in msg:gmatch("%S+") do
         part = part:lower()
-        if (part == "org") then return true
-        elseif (part == "uc") then return true
-        elseif (part == "tb") then return true
+        if part == "org" then return true
+        elseif part == "uc" then return true
+        elseif part == "tb" then return true
         end
     end
     return false
