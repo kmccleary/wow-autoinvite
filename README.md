@@ -24,6 +24,7 @@ The specific order of the keywords do not matter, so long as they are present in
 
 ## Abbreviations
 
+- Invite: "i", "inv"
 - Sell Portals mode: "s"
 - Summon Group: "sg", "sum"
 - Raid Group: "rg"
