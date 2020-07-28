@@ -18,8 +18,8 @@ The specific order of the keywords do not matter, so long as they are present in
 
 ## Usage
 
-- Selling Portals mode:  ```/ai sell```
-- Summon Group mode:  ```/ai summon```
+- Selling Portals mode:  ```/ai sell [on|off]```
+- Summon Group mode:  ```/ai summon [on|off]```
 - Raid Group mode:  ```/ai raid [on|off]```
 
 ## Abbreviations
