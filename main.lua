@@ -80,11 +80,21 @@ function isSellingSummonsRequest(msg, event)
             hasZG = true
         end
     end
-    -- Make the decision.  Trusted channels allow "i" for invite abbreviation.
-    if event == "CHAT_MSG_WHISPER" or event == "CHAT_MSG_GUILD" then
-        return hasInvite and (hasBVP or hasDM or hasZG)
+    -- Make the decision.
+    if not hasInvite then
+        return false
+    end
+    if (not (event == "CHAT_MSG_WHISPER" or event == "CHAT_MSG_GUILD")) and (not hasInviteNA) then
+        return false
+    end
+    if hasBVP and sellingBVPSummonsIsEnabled then
+        return true
+    elseif hasDM and sellingDMSummonsIsEnabled then
+        return true
+    elseif hasZG and sellingZGSummonsIsEnabled then
+        return true
     else
-        return hasInvite and hasInviteNA and (hasBVP or hasDM or hasZG)
+        return false
     end
 end
 
