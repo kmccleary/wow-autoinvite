@@ -1,6 +1,6 @@
 ## Interface: 11305
 ## Title: AutoInvite
 ## Author: Kenneth McCleary <ken@mccleary.me>
-## Version: 1.0
+## Version: 1.1
 
 main.lua

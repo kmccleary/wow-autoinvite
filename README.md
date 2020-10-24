@@ -13,19 +13,24 @@ The specific order of the keywords do not matter, so long as they are present in
 ## Modes
 
 - Selling Portals mode: Invites if someone says, yells, or whispers one of the major city names.
+- Selling Summons mode: Invites if someone whispers *invite*, or says *invite* or *wtb* + location.
 - Summon Group mode: Invites if someone whispers *invite*, or says *invite summon* in guild chat.
 - Raid Group mode: Invites if someone whispers *invite*, or says *invite raid* in guild chat.
 
 ## Usage
 
-- Selling Portals mode:  ```/ai sell [on|off]```
-- Summon Group mode:  ```/ai summon [on|off]```
+- Sell Major City Portals mode:  ```/ai sell [on|off]```
+- Sell Summons to Bloodvenom Post:  ```/ai sellbvp```
+- Sell Summons to Dire Maul:  ```/ai selldm```
+- Sell Summons to Yojamba Isle:  ```/ai sellzg```
+- Raid Summon Group:  ```/ai summon [on|off]```
 - Raid Group mode:  ```/ai raid [on|off]```
 
 ## Abbreviations
 
 - Invite: "i", "inv"
 - Sell Portals mode: "s"
+- Sell Summons mode: "ssf", "szg", "sdm"
 - Summon Group: "sg", "sum"
 - Raid Group: "rg"
 

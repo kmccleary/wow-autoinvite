@@ -1,4 +1,7 @@
 sellingIsEnabled = false
+sellingBVPSummonsIsEnabled = false
+sellingDMSummonsIsEnabled = false
+sellingZGSummonsIsEnabled = false
 summoningIsEnabled = false
 raidIsEnabled = false
 
@@ -51,6 +54,40 @@ function isSummoningRequest(msg, event)
     end
 end
 
+-- Tests for selling summon requests.
+function isSellingSummonsRequest(msg, event)
+    -- Scan for keywords.
+    local hasInvite = false
+    local hasInviteNA = false
+    local hasBVP = false
+    local hasDM = false
+    local hasZG = false
+    for part in msg:gmatch("%S+") do
+        part = part:lower()
+        if part == "i" then
+            hasInvite = true
+        elseif part == "inv" or part == "invite" or part == "wtb" then
+            hasInvite = true
+            hasInviteNA = true
+        end
+        if part == "bvp" or part == "sf" or part == "sfs" or part == "songflower" then
+            hasBVP = true
+        end
+        if part == "dm" or part == "dmt" or part == "dire" or part == "maul" then
+            hasDM = true
+        end
+        if part == "zg" or part == "heart" or part == "isle" or part == "island" then
+            hasZG = true
+        end
+    end
+    -- Make the decision.  Trusted channels allow "i" for invite abbreviation.
+    if event == "CHAT_MSG_WHISPER" or event == "CHAT_MSG_GUILD" then
+        return hasInvite and (hasBVP or hasDM or hasZG)
+    else
+        return hasInvite and hasInviteNA and (hasBVP or hasDM or hasZG)
+    end
+end
+
 -- Determines the desired state from arguments passed to slash commands.
 function stateEnabler(what, currentState, args)
     if args == "on" then
@@ -86,6 +123,12 @@ function SlashCmdList.AUTOINVITE(msg, editbox)
         if summoningIsEnabled then
             raidIsEnabled = false
         end
+    elseif cmd == "sbvp" or cmd == "sellbvp" then
+        sellingBVPSummonsIsEnabled = stateEnabler("Selling BVP Summons mode", sellingBVPSummonsIsEnabled, args)
+    elseif cmd == "sdm" or cmd == "selldm" then
+        sellingDMSummonsIsEnabled = stateEnabler("Selling DM Summons mode", sellingDMSummonsIsEnabled, args)
+    elseif cmd == "szg" or cmd == "sellzg" then
+        sellingZGSummonsIsEnabled = stateEnabler("Selling ZG Summons mode", sellingZGSummonsIsEnabled, args)
     elseif cmd == "rg" or cmd == "raid" then
         raidIsEnabled = stateEnabler("Raid group mode", raidIsEnabled, args)
         if raidIsEnabled then
@@ -102,6 +145,7 @@ end
 
 -- Set up frame and handle events.
 local frame = CreateFrame("Frame")
+frame:RegisterEvent("CHAT_MSG_CHANNEL")
 frame:RegisterEvent("CHAT_MSG_SAY")
 frame:RegisterEvent("CHAT_MSG_YELL")
 frame:RegisterEvent("CHAT_MSG_WHISPER")
@@ -115,6 +159,8 @@ frame:SetScript("OnEvent", function(self, event, ...)
     if isSellingRequest(msg, event) then
         InviteUnit(senderName)
     elseif isSummoningRequest(msg, event) then
+        InviteUnit(senderName)
+    elseif isSellingSummonsRequest(msg, event) then
         InviteUnit(senderName)
     end
 end)
