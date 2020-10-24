@@ -20,9 +20,9 @@ The specific order of the keywords do not matter, so long as they are present in
 ## Usage
 
 - Sell Major City Portals mode:  ```/ai sell [on|off]```
-- Sell Summons to Bloodvenom Post:  ```/ai sellbvp```
-- Sell Summons to Dire Maul:  ```/ai selldm```
-- Sell Summons to Yojamba Isle:  ```/ai sellzg```
+- Sell Summons to Bloodvenom Post:  ```/ai sellbvp [on|off]```
+- Sell Summons to Dire Maul:  ```/ai selldm [on|off]```
+- Sell Summons to Yojamba Isle:  ```/ai sellzg [on|off]```
 - Raid Summon Group:  ```/ai summon [on|off]```
 - Raid Group mode:  ```/ai raid [on|off]```
 
